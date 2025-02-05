@@ -47,6 +47,22 @@ type Flux struct {
 	F107Obs float64
 }
 
+type threeHourKp struct {
+	Year           uint
+	Month          uint
+	Date           uint
+	ThreeHourIndex int
+	Kp             float64
+}
+
+type threeHourAp struct {
+	Year           uint
+	Month          uint
+	Date           uint
+	ThreeHourIndex int
+	Ap             int
+}
+
 const maxDatalines uint = 40
 const fieldNumbers int = 28
 
@@ -155,6 +171,62 @@ func main() {
 		}
 	}
 
+	// Determine valid three-hour Kp value
+	kpVal := &threeHourKp{
+		Kp:             -1.0,
+		Year:           0,
+		Month:          0,
+		Date:           0,
+		ThreeHourIndex: 0,
+	}
+	for i := numlines - 1; i >= 0; i-- {
+		d := datalist[i]
+		// The day contains at least one valid data
+		if d.Kp[0] >= 0.0 {
+			for j := 7; j >= 0; j-- {
+				if d.Kp[j] >= 0.0 {
+					kpVal.ThreeHourIndex = j
+					kpVal.Year = d.Year
+					kpVal.Month = d.Month
+					kpVal.Date = d.Date
+					kpVal.Kp = d.Kp[j]
+					break
+				}
+			}
+		}
+		if kpVal.Kp >= 0.0 {
+			break
+		}
+	}
+
+	// Determine valid three-hour Ap value
+	apVal := &threeHourAp{
+		Ap:             -1,
+		Year:           0,
+		Month:          0,
+		Date:           0,
+		ThreeHourIndex: 0,
+	}
+	for i := numlines - 1; i >= 0; i-- {
+		d := datalist[i]
+		// The day contains at least one valid data
+		if d.Ap[0] >= 0.0 {
+			for j := 7; j >= 0; j-- {
+				if d.Ap[j] >= 0.0 {
+					apVal.ThreeHourIndex = j
+					apVal.Year = d.Year
+					apVal.Month = d.Month
+					apVal.Date = d.Date
+					apVal.Ap = d.Ap[j]
+					break
+				}
+			}
+		}
+		if apVal.Ap >= 0.0 {
+			break
+		}
+	}
+
 	// Pick up the latest valid data
 	// If the last line data is not filled,
 	// use the one line data before the last line data
@@ -200,5 +272,10 @@ func main() {
 	fmt.Printf("Flux: %04d-%02d-%02d: %.1f\n",
 		fluxVal.Year, fluxVal.Month, fluxVal.Date,
 		fluxVal.F107Obs)
-
+	fmt.Printf("3-hour Kp: %04d-%02d-%02d %02dh: %.1f\n",
+		kpVal.Year, kpVal.Month, kpVal.Date,
+		kpVal.ThreeHourIndex*3, kpVal.Kp)
+	fmt.Printf("3-hour Ap: %04d-%02d-%02d %02dh: %d\n",
+		apVal.Year, apVal.Month, apVal.Date,
+		apVal.ThreeHourIndex*3, apVal.Ap)
 }
