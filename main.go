@@ -239,10 +239,12 @@ func main() {
 	fmt.Printf("Estimated SSN %04d%02d%02d: %d\n",
 		fluxVal.Year, fluxVal.Month, fluxVal.Date,
 		estimatedSSN(fluxVal.F107Obs))
-	fmt.Printf("3-hour Kp %04d%02d%02d %02dZ: %.2f\n",
+	kptime := kpVal.ThreeHourIndex * 3
+	fmt.Printf("3-hour Kp %04d%02d%02d %02dZ-%02dZ: %.2f\n",
 		kpVal.Year, kpVal.Month, kpVal.Date,
-		kpVal.ThreeHourIndex*3, kpVal.Kp)
-	fmt.Printf("3-hour Ap %04d%02d%02d %02dZ: %d\n",
+		kptime, kptime+2, kpVal.Kp)
+	aptime := apVal.ThreeHourIndex * 3
+	fmt.Printf("3-hour Ap %04d%02d%02d %02dZ-%02dZ: %d\n",
 		apVal.Year, apVal.Month, apVal.Date,
-		apVal.ThreeHourIndex*3, apVal.Ap)
+		aptime, aptime+2, apVal.Ap)
 }
