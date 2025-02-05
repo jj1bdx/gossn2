@@ -227,55 +227,22 @@ func main() {
 		}
 	}
 
-	// Pick up the latest valid data
-	// If the last line data is not filled,
-	// use the one line data before the last line data
-	var checkdata Dailydata
-	var checkdata2 Dailydata
-	if datalist[numlines-1].Ap[0] == -1 {
-		checkdata = datalist[numlines-2]
-		checkdata2 = datalist[numlines-3]
-	} else {
-		checkdata = datalist[numlines-1]
-		checkdata2 = datalist[numlines-2]
-	}
-
-	// For testing purpose: print parsed results
-	d := checkdata2
-	fmt.Printf("%04d-%02d-%02d "+
-		"%.1f/%.1f/%.1f/%.1f/%.1f/%.1f/%.1f/%.1f "+
-		"%d/%d/%d/%d/%d/%d/%d/%d "+
-		"%d %d %.1f\n",
-		d.Year, d.Month, d.Date,
-		d.Kp[0], d.Kp[1], d.Kp[2], d.Kp[3],
-		d.Kp[4], d.Kp[5], d.Kp[6], d.Kp[7],
-		d.Ap[0], d.Ap[1], d.Ap[2], d.Ap[3],
-		d.Ap[4], d.Ap[5], d.Ap[6], d.Ap[7],
-		d.ApDay, d.SN, d.F107Obs)
-	d = checkdata
-	fmt.Printf("%04d-%02d-%02d "+
-		"%.1f/%.1f/%.1f/%.1f/%.1f/%.1f/%.1f/%.1f "+
-		"%d/%d/%d/%d/%d/%d/%d/%d "+
-		"%d %d %.1f\n",
-		d.Year, d.Month, d.Date,
-		d.Kp[0], d.Kp[1], d.Kp[2], d.Kp[3],
-		d.Kp[4], d.Kp[5], d.Kp[6], d.Kp[7],
-		d.Ap[0], d.Ap[1], d.Ap[2], d.Ap[3],
-		d.Ap[4], d.Ap[5], d.Ap[6], d.Ap[7],
-		d.ApDay, d.SN, d.F107Obs)
-
-	fmt.Printf("EISN: %04d-%02d-%02d: %d\n",
+	// Print obtained results
+	fmt.Printf("EISN %04d%02d%02d: %d\n",
 		eisnVal.Year, eisnVal.Month, eisnVal.Date, eisnVal.SN)
-	fmt.Printf("APDay: %04d-%02d-%02d: %d\n",
+	fmt.Printf("Daily Ap %04d%02d%02d: %d\n",
 		dailyApVal.Year, dailyApVal.Month, dailyApVal.Date,
 		dailyApVal.ApDay)
-	fmt.Printf("Flux: %04d-%02d-%02d: %.1f\n",
+	fmt.Printf("Flux %04d%02d%02d: %.1f\n",
 		fluxVal.Year, fluxVal.Month, fluxVal.Date,
 		fluxVal.F107Obs)
-	fmt.Printf("3-hour Kp: %04d-%02d-%02d %02dh: %.1f\n",
+	fmt.Printf("Estimated SSN %04d%02d%02d: %d\n",
+		fluxVal.Year, fluxVal.Month, fluxVal.Date,
+		estimatedSSN(fluxVal.F107Obs))
+	fmt.Printf("3-hour Kp %04d%02d%02d %02dZ: %.2f\n",
 		kpVal.Year, kpVal.Month, kpVal.Date,
 		kpVal.ThreeHourIndex*3, kpVal.Kp)
-	fmt.Printf("3-hour Ap: %04d-%02d-%02d %02dh: %d\n",
+	fmt.Printf("3-hour Ap %04d%02d%02d %02dZ: %d\n",
 		apVal.Year, apVal.Month, apVal.Date,
 		apVal.ThreeHourIndex*3, apVal.Ap)
 }
