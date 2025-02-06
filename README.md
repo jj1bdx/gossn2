@@ -1,6 +1,15 @@
 # gossn2: a solar activity information retriever
 
-Work in progress
+## Output example
+
+```text
+EISN 20250205: 157
+Daily Ap 20250205: 6
+Flux 20250205: 191.3
+Estimated SSN 20250205: 201
+3-hour Kp 20250206 03Z-05Z: 0.67
+3-hour Ap 20250206 03Z-05Z: 3
+```
 
 ## Data source reference
 
